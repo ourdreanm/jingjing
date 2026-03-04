@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>小恒弟弟永远陪着静静姐姐</title>
+
+<style>
+html,body{
+margin:0;
+padding:0;
+overflow:hidden;
+background:radial-gradient(circle at center,#140810,#050205 70%);
+font-family:"PingFang SC",sans-serif;
+}
+
+canvas{
+position:fixed;
+top:0;
+left:0;
+z-index:0;
+}
+
+.ui{
+position:fixed;
+width:100%;
+height:100%;
+z-index:2;
+text-align:center;
+color:#ffb6e6;
+}
+
+.start{
+position:absolute;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.85);
+display:flex;
+justify-content:center;
+align-items:center;
+z-index:5;
+}
+
+.start button{
+padding:14px 30px;
+font-size:18px;
+border-radius:30px;
+border:1px solid #ffb6e6;
+background:rgba(255,182,230,0.1);
+color:#ffb6e6;
+}
+
+.centerText{
+position:absolute;
+top:35%;
+left:50%;
+transform:translate(-50%,-50%);
+font-size:28px;
+letter-spacing:4px;
+opacity:0;
+transition:2s;
+text-shadow:0 0 20px rgba(255,182,230,0.8);
+}
+
+.loveBtn{
+position:absolute;
+top:55%;
+left:50%;
+transform:translateX(-50%);
+padding:12px 28px;
+border-radius:25px;
+border:1px solid #ffb6e6;
+background:rgba(255,182,230,0.15);
+color:#ffb6e6;
+font-size:16px;
+}
+
+.confirmText{
+position:absolute;
+top:55%;
+left:50%;
+transform:translateX(-50%);
+font-size:18px;
+color:#ffb6e6;
+}
+
+.floatLove{
+position:absolute;
+bottom:-40px;
+font-size:14px;
+color:#ffb6e6;
+animation:rise 22s linear infinite;
+opacity:0.85;
+}
+
+@keyframes rise{
+from{transform:translateY(0);opacity:0;}
+to{transform:translateY(-110vh);opacity:1;}
+}
+</style>
+</head>
+
+<body>
+
+<div class="ui" id="app">
+
+<div class="start" v-if="!started">
+<button @click="startLove">💖 轻轻点一下</button>
+</div>
+
+<div class="centerText" :style="{opacity:textVisible?1:0}">
+静静姐姐<br>我爱你
+</div>
+
+<button v-if="showButton" class="loveBtn" @click="confirmLove">
+永远和我在一起吧
+</button>
+
+<div v-if="confirmed" class="confirmText">
+那我以后就只宠你一个人
+</div>
+
+<div v-for="f in floating" :key="f.id"
+class="floatLove"
+:style="{left:f.left+'%'}">
+{{f.text}}
+</div>
+
+</div>
+
+<audio id="bgm" loop>
+<source src="https://music.163.com/song/media/outer/url?id=1330348068.mp3">
+</audio>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+
+<script>
+const { createApp, ref } = Vue;
+
+createApp({
+setup(){
+
+const started=ref(false)
+const textVisible=ref(false)
+const showButton=ref(false)
+const confirmed=ref(false)
+const floating=ref([])
+
+let scene,camera,renderer,heart,stars
+
+// 已修正“给”→“跟”
+const LOVE_WORDS=[
+"静静姐姐是我唯一的偏爱",
+"小恒弟弟会一直跟你在一起",
+"遇见你是我最温柔的幸运",
+"以后春天都陪你看樱花",
+"你笑一下我心都软了",
+"入目无他人，四下皆是你",
+"余生漫漫，皆是你",
+"双向奔赴，岁岁年年",
+"世界很大，刚好是你",
+"满心欢喜，余生有你",
+"山水万程，皆要好运，皆要你",
+"我的偏爱和例外，全都是你",
+"朝朝暮暮，岁岁年年，只愿与你",
+"星河滚烫，你是人间理想",
+"温山软水万千，不及你眉眼半分"
+]
+
+function startLove(){
+started.value=true
+document.getElementById("bgm").play().catch(()=>{})
+initThree()
+setTimeout(()=>textVisible.value=true,1500)
+setTimeout(()=>showButton.value=true,3000)
+setInterval(spawnFloat,4000)
+}
+
+function confirmLove(){
+showButton.value=false
+confirmed.value=true
+heart.material.color.set(0xff3366)
+setTimeout(()=>heart.material.color.set(0xff4d6d),800)
+}
+
+function spawnFloat(){
+floating.value.push({
+id:Math.random(),
+text:"❤️ "+LOVE_WORDS[Math.floor(Math.random()*LOVE_WORDS.length)],
+left:Math.random()*90
+})
+setTimeout(()=>floating.value.shift(),22000)
+}
+
+function initThree(){
+
+scene=new THREE.Scene()
+camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000)
+renderer=new THREE.WebGLRenderer({alpha:true,antialias:true})
+renderer.setSize(window.innerWidth,window.innerHeight)
+document.body.appendChild(renderer.domElement)
+camera.position.z=10
+
+// ⭐ 星光背景
+const starGeo=new THREE.BufferGeometry()
+const starCount=2000
+const starPos=new Float32Array(starCount*3)
+for(let i=0;i<starCount;i++){
+let i3=i*3
+starPos[i3]=(Math.random()-0.5)*50
+starPos[i3+1]=(Math.random()-0.5)*50
+starPos[i3+2]=(Math.random()-0.5)*50
+}
+starGeo.setAttribute("position",new THREE.BufferAttribute(starPos,3))
+const starMat=new THREE.PointsMaterial({
+size:0.2,
+color:0xffffff,
+transparent:true,
+opacity:0.6
+})
+stars=new THREE.Points(starGeo,starMat)
+scene.add(stars)
+
+// ❤️ 爱心
+const geo=new THREE.BufferGeometry()
+const count=15000
+const pos=new Float32Array(count*3)
+
+for(let i=0;i<count;i++){
+let t=Math.random()*Math.PI*2
+let r=0.6+Math.random()*0.4
+let x=16*Math.pow(Math.sin(t),3)
+let y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t)
+x*=0.12*r
+y*=0.12*r
+let i3=i*3
+pos[i3]=x
+pos[i3+1]=y
+pos[i3+2]=(Math.random()-0.5)*0.5
+}
+
+geo.setAttribute("position",new THREE.BufferAttribute(pos,3))
+
+const mat=new THREE.PointsMaterial({
+size:0.08,
+color:0xff4d6d,
+transparent:true,
+opacity:0.95
+})
+
+heart=new THREE.Points(geo,mat)
+scene.add(heart)
+
+let scaleDir=1
+
+function animate(){
+requestAnimationFrame(animate)
+
+// 呼吸效果
+heart.scale.x+=0.0008*scaleDir
+heart.scale.y+=0.0008*scaleDir
+if(heart.scale.x>1.08||heart.scale.x<0.95){
+scaleDir*=-1
+}
+
+heart.rotation.y+=0.002
+stars.rotation.y+=0.0005
+
+renderer.render(scene,camera)
+}
+
+animate()
+
+window.addEventListener("resize",()=>{
+camera.aspect=window.innerWidth/window.innerHeight
+camera.updateProjectionMatrix()
+renderer.setSize(window.innerWidth,window.innerHeight)
+})
+}
+
+return{
+started,startLove,textVisible,
+showButton,confirmLove,confirmed,floating
+}
+
+}
+}).mount("#app")
+</script>
+
+</body>
+</html>
