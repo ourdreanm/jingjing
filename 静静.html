@@ -1,135 +1,240 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <title>小恒弟弟永远陪着静静姐姐</title>
 
 <style>
-html,body{
-margin:0;
-padding:0;
-overflow:hidden;
-background:radial-gradient(circle at center,#140810,#050205 70%);
-font-family:"PingFang SC",sans-serif;
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: radial-gradient(circle at center, #140810, #050205 72%);
+  font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+  -webkit-tap-highlight-color: transparent;
 }
 
-canvas{
-position:fixed;
-top:0;
-left:0;
-z-index:0;
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
 }
 
-.ui{
-position:fixed;
-width:100%;
-height:100%;
-z-index:2;
-text-align:center;
-color:#ffb6e6;
+#threeCanvas {
+  z-index: 0;
 }
 
-.start{
-position:absolute;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.85);
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:5;
+#sakuraCanvas {
+  z-index: 1;
+  pointer-events: none;
 }
 
-.start button{
-padding:14px 30px;
-font-size:18px;
-border-radius:30px;
-border:1px solid #ffb6e6;
-background:rgba(255,182,230,0.1);
-color:#ffb6e6;
+#fxCanvas {
+  z-index: 3;
+  pointer-events: none;
 }
 
-.centerText{
-position:absolute;
-top:35%;
-left:50%;
-transform:translate(-50%,-50%);
-font-size:28px;
-letter-spacing:4px;
-opacity:0;
-transition:2s;
-text-shadow:0 0 20px rgba(255,182,230,0.8);
+.ui {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  text-align: center;
+  color: #ffb6e6;
+  pointer-events: none;
 }
 
-.loveBtn{
-position:absolute;
-top:55%;
-left:50%;
-transform:translateX(-50%);
-padding:12px 28px;
-border-radius:25px;
-border:1px solid #ffb6e6;
-background:rgba(255,182,230,0.15);
-color:#ffb6e6;
-font-size:16px;
+.start {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.86);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 8;
+  pointer-events: auto;
 }
 
-.confirmText{
-position:absolute;
-top:55%;
-left:50%;
-transform:translateX(-50%);
-font-size:18px;
-color:#ffb6e6;
+.start button {
+  padding: 14px 30px;
+  font-size: 18px;
+  border-radius: 30px;
+  border: 1px solid #ffb6e6;
+  background: rgba(255,182,230,0.1);
+  color: #ffb6e6;
+  cursor: pointer;
+  box-shadow:
+    0 0 18px rgba(255,182,230,0.25),
+    0 2px 10px rgba(0,0,0,0.4);
+  text-shadow: 0 1px 3px rgba(0,0,0,0.55);
+  font-weight: 600;
 }
 
-.floatLove{
-position:absolute;
-bottom:-40px;
-font-size:14px;
-color:#ffb6e6;
-animation:rise 22s linear infinite;
-opacity:0.85;
+.centerText {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30px;
+  letter-spacing: 4px;
+  line-height: 1.7;
+  width: 90%;
+  color: #ffb6e6;
+  opacity: 0;
+  transition: opacity 2s ease;
+  font-weight: 700;
+  text-shadow:
+    0 0 8px rgba(255, 105, 180, 0.95),
+    0 0 18px rgba(255, 182, 230, 0.85),
+    0 2px 8px rgba(0, 0, 0, 0.78),
+    0 0 2px rgba(0, 0, 0, 0.95);
 }
 
-@keyframes rise{
-from{transform:translateY(0);opacity:0;}
-to{transform:translateY(-110vh);opacity:1;}
+.loveBtn {
+  position: absolute;
+  top: 56%;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 28px;
+  border-radius: 25px;
+  border: 1px solid #ffb6e6;
+  background: rgba(255,182,230,0.16);
+  color: #ffb6e6;
+  font-size: 16px;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow:
+    0 0 16px rgba(255,182,230,0.22),
+    0 2px 10px rgba(0,0,0,0.35);
+  backdrop-filter: blur(4px);
+  font-weight: 600;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+}
+
+.confirmText {
+  position: absolute;
+  top: 56%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 19px;
+  color: #ffd6ea;
+  text-shadow:
+    0 0 8px rgba(255,182,230,0.55),
+    0 2px 6px rgba(0,0,0,0.78);
+  width: 88%;
+  font-weight: 600;
+}
+
+.floatLove {
+  position: absolute;
+  bottom: -40px;
+  font-size: 15px;
+  color: #fff8e8;
+  text-shadow:
+    0 0 4px rgba(255,255,255,0.45),
+    0 1px 6px rgba(0,0,0,0.88),
+    0 0 12px rgba(255,220,120,0.2);
+  animation: rise 20s linear forwards;
+  opacity: 0.98;
+  white-space: nowrap;
+  font-weight: 500;
+}
+
+@keyframes rise {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-112vh);
+    opacity: 0;
+  }
+}
+
+.bottomTip {
+  position: absolute;
+  bottom: 18px;
+  width: 100%;
+  font-size: 12px;
+  color: #ffd8ea;
+  letter-spacing: 2px;
+  text-shadow:
+    0 1px 5px rgba(0,0,0,0.82),
+    0 0 10px rgba(255,182,230,0.2);
+}
+
+@media (max-width: 768px) {
+  .centerText {
+    font-size: 25px;
+    top: 34%;
+    width: 92%;
+    line-height: 1.65;
+  }
+
+  .loveBtn {
+    font-size: 15px;
+    padding: 11px 24px;
+    top: 57%;
+  }
+
+  .confirmText {
+    font-size: 17px;
+    top: 57%;
+  }
+
+  .floatLove {
+    font-size: 14px;
+  }
+
+  .start button {
+    font-size: 17px;
+    padding: 13px 24px;
+  }
 }
 </style>
 </head>
 
 <body>
 
+<canvas id="sakuraCanvas"></canvas>
+<canvas id="fxCanvas"></canvas>
+
 <div class="ui" id="app">
+  <div class="start" v-if="!started">
+    <button @click="startLove">💖 轻轻点一下</button>
+  </div>
 
-<div class="start" v-if="!started">
-<button @click="startLove">💖 轻轻点一下</button>
-</div>
+  <div class="centerText" :style="{opacity:textVisible?1:0}">
+    静静姐姐<br>我爱你
+  </div>
 
-<div class="centerText" :style="{opacity:textVisible?1:0}">
-静静姐姐<br>我爱你
-</div>
+  <button v-if="showButton" class="loveBtn" @click="confirmLove">
+    永远和我在一起吧
+  </button>
 
-<button v-if="showButton" class="loveBtn" @click="confirmLove">
-永远和我在一起吧
-</button>
+  <div v-if="confirmed" class="confirmText">
+    那我以后就只宠你一个人 💖
+  </div>
 
-<div v-if="confirmed" class="confirmText">
-那我以后就只宠你一个人
-</div>
+  <div
+    v-for="f in floating"
+    :key="f.id"
+    class="floatLove"
+    :style="{left:f.left+'%'}">
+    {{f.text}}
+  </div>
 
-<div v-for="f in floating" :key="f.id"
-class="floatLove"
-:style="{left:f.left+'%'}">
-{{f.text}}
-</div>
-
+  <div class="bottomTip" v-if="started && !confirmed">
+    星星、樱花和心动，都在偷偷偏向你
+  </div>
 </div>
 
 <audio id="bgm" loop>
-<source src="https://music.163.com/song/media/outer/url?id=1330348068.mp3">
+  <source src="https://music.163.com/song/media/outer/url?id=1330348068.mp3">
 </audio>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.js"></script>
@@ -139,153 +244,368 @@ class="floatLove"
 const { createApp, ref } = Vue;
 
 createApp({
-setup(){
+  setup() {
+    const started = ref(false);
+    const textVisible = ref(false);
+    const showButton = ref(false);
+    const confirmed = ref(false);
+    const floating = ref([]);
 
-const started=ref(false)
-const textVisible=ref(false)
-const showButton=ref(false)
-const confirmed=ref(false)
-const floating=ref([])
+    let scene, camera, renderer, heart, stars;
+    let sakuraRunning = false;
+    let floatTimer = null;
 
-let scene,camera,renderer,heart,stars
+    const LOVE_WORDS = [
+      "静静姐姐是我唯一的偏爱",
+      "小恒弟弟会一直跟你在一起",
+      "遇见你是我最温柔的幸运",
+      "以后春天都陪你看樱花",
+      "你笑一下我心都软了",
+      "入目无他人，四下皆是你",
+      "余生漫漫，皆是你",
+      "双向奔赴，岁岁年年",
+      "世界很大，刚好是你",
+      "满心欢喜，余生有你",
+      "山水万程，皆要好运，皆要你",
+      "我的偏爱和例外，全都是你",
+      "朝朝暮暮，岁岁年年，只愿与你",
+      "星河滚烫，你是人间理想",
+      "温山软水万千，不及你眉眼半分"
+    ];
 
-// 已修正“给”→“跟”
-const LOVE_WORDS=[
-"静静姐姐是我唯一的偏爱",
-"小恒弟弟会一直跟你在一起",
-"遇见你是我最温柔的幸运",
-"以后春天都陪你看樱花",
-"你笑一下我心都软了",
-"入目无他人，四下皆是你",
-"余生漫漫，皆是你",
-"双向奔赴，岁岁年年",
-"世界很大，刚好是你",
-"满心欢喜，余生有你",
-"山水万程，皆要好运，皆要你",
-"我的偏爱和例外，全都是你",
-"朝朝暮暮，岁岁年年，只愿与你",
-"星河滚烫，你是人间理想",
-"温山软水万千，不及你眉眼半分"
-]
+    function startLove() {
+      started.value = true;
+      document.getElementById("bgm").play().catch(() => {});
+      initThree();
+      initSakura();
+      initFXCanvas();
 
-function startLove(){
-started.value=true
-document.getElementById("bgm").play().catch(()=>{})
-initThree()
-setTimeout(()=>textVisible.value=true,1500)
-setTimeout(()=>showButton.value=true,3000)
-setInterval(spawnFloat,4000)
-}
+      setTimeout(() => {
+        textVisible.value = true;
+      }, 1400);
 
-function confirmLove(){
-showButton.value=false
-confirmed.value=true
-heart.material.color.set(0xff3366)
-setTimeout(()=>heart.material.color.set(0xff4d6d),800)
-}
+      setTimeout(() => {
+        showButton.value = true;
+      }, 3000);
 
-function spawnFloat(){
-floating.value.push({
-id:Math.random(),
-text:"❤️ "+LOVE_WORDS[Math.floor(Math.random()*LOVE_WORDS.length)],
-left:Math.random()*90
-})
-setTimeout(()=>floating.value.shift(),22000)
-}
+      if (!floatTimer) {
+        spawnFloat();
+        floatTimer = setInterval(spawnFloat, 3200);
+      }
+    }
 
-function initThree(){
+    function confirmLove() {
+      showButton.value = false;
+      confirmed.value = true;
 
-scene=new THREE.Scene()
-camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000)
-renderer=new THREE.WebGLRenderer({alpha:true,antialias:true})
-renderer.setSize(window.innerWidth,window.innerHeight)
-document.body.appendChild(renderer.domElement)
-camera.position.z=10
+      if (heart) {
+        heart.material.color.set(0xff3366);
+        setTimeout(() => heart.material.color.set(0xff4d6d), 900);
+      }
 
-// ⭐ 星光背景
-const starGeo=new THREE.BufferGeometry()
-const starCount=2000
-const starPos=new Float32Array(starCount*3)
-for(let i=0;i<starCount;i++){
-let i3=i*3
-starPos[i3]=(Math.random()-0.5)*50
-starPos[i3+1]=(Math.random()-0.5)*50
-starPos[i3+2]=(Math.random()-0.5)*50
-}
-starGeo.setAttribute("position",new THREE.BufferAttribute(starPos,3))
-const starMat=new THREE.PointsMaterial({
-size:0.2,
-color:0xffffff,
-transparent:true,
-opacity:0.6
-})
-stars=new THREE.Points(starGeo,starMat)
-scene.add(stars)
+      explodeHearts(
+        window.innerWidth / 2,
+        window.innerHeight * 0.56
+      );
+    }
 
-// ❤️ 爱心
-const geo=new THREE.BufferGeometry()
-const count=15000
-const pos=new Float32Array(count*3)
+    function spawnFloat() {
+      const item = {
+        id: Math.random(),
+        text: "❤️ " + LOVE_WORDS[Math.floor(Math.random() * LOVE_WORDS.length)],
+        left: 4 + Math.random() * 84
+      };
+      floating.value.push(item);
 
-for(let i=0;i<count;i++){
-let t=Math.random()*Math.PI*2
-let r=0.6+Math.random()*0.4
-let x=16*Math.pow(Math.sin(t),3)
-let y=13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t)
-x*=0.12*r
-y*=0.12*r
-let i3=i*3
-pos[i3]=x
-pos[i3+1]=y
-pos[i3+2]=(Math.random()-0.5)*0.5
-}
+      setTimeout(() => {
+        const idx = floating.value.findIndex(v => v.id === item.id);
+        if (idx !== -1) floating.value.splice(idx, 1);
+      }, 20000);
+    }
 
-geo.setAttribute("position",new THREE.BufferAttribute(pos,3))
+    function initThree() {
+      scene = new THREE.Scene();
 
-const mat=new THREE.PointsMaterial({
-size:0.08,
-color:0xff4d6d,
-transparent:true,
-opacity:0.95
-})
+      camera = new THREE.PerspectiveCamera(
+        75,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
 
-heart=new THREE.Points(geo,mat)
-scene.add(heart)
+      renderer = new THREE.WebGLRenderer({
+        alpha: true,
+        antialias: true
+      });
 
-let scaleDir=1
+      renderer.domElement.id = "threeCanvas";
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      document.body.appendChild(renderer.domElement);
 
-function animate(){
-requestAnimationFrame(animate)
+      camera.position.z = 10;
 
-// 呼吸效果
-heart.scale.x+=0.0008*scaleDir
-heart.scale.y+=0.0008*scaleDir
-if(heart.scale.x>1.08||heart.scale.x<0.95){
-scaleDir*=-1
-}
+      createStars();
+      createHeart();
 
-heart.rotation.y+=0.002
-stars.rotation.y+=0.0005
+      let scaleDir = 1;
 
-renderer.render(scene,camera)
-}
+      function animate() {
+        requestAnimationFrame(animate);
 
-animate()
+        if (heart) {
+          heart.scale.x += 0.0008 * scaleDir;
+          heart.scale.y += 0.0008 * scaleDir;
+          if (heart.scale.x > 1.08 || heart.scale.x < 0.95) {
+            scaleDir *= -1;
+          }
+          heart.rotation.y += 0.0022;
+          heart.rotation.z = Math.sin(Date.now() * 0.0007) * 0.05;
+        }
 
-window.addEventListener("resize",()=>{
-camera.aspect=window.innerWidth/window.innerHeight
-camera.updateProjectionMatrix()
-renderer.setSize(window.innerWidth,window.innerHeight)
-})
-}
+        if (stars) {
+          stars.rotation.y += 0.00045;
+          stars.rotation.x += 0.00008;
+        }
 
-return{
-started,startLove,textVisible,
-showButton,confirmLove,confirmed,floating
-}
+        renderer.render(scene, camera);
+      }
 
-}
-}).mount("#app")
+      animate();
+
+      window.addEventListener("resize", () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    }
+
+    function createStars() {
+      const starGeo = new THREE.BufferGeometry();
+      const starCount = 2200;
+      const starPos = new Float32Array(starCount * 3);
+
+      for (let i = 0; i < starCount; i++) {
+        let i3 = i * 3;
+        starPos[i3] = (Math.random() - 0.5) * 52;
+        starPos[i3 + 1] = (Math.random() - 0.5) * 52;
+        starPos[i3 + 2] = (Math.random() - 0.5) * 52;
+      }
+
+      starGeo.setAttribute("position", new THREE.BufferAttribute(starPos, 3));
+
+      const starMat = new THREE.PointsMaterial({
+        size: 0.18,
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.62
+      });
+
+      stars = new THREE.Points(starGeo, starMat);
+      scene.add(stars);
+    }
+
+    function createHeart() {
+      const geo = new THREE.BufferGeometry();
+      const count = 15000;
+      const pos = new Float32Array(count * 3);
+
+      for (let i = 0; i < count; i++) {
+        const t = Math.random() * Math.PI * 2;
+        const r = 0.6 + Math.random() * 0.4;
+        let x = 16 * Math.pow(Math.sin(t), 3);
+        let y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
+        x *= 0.12 * r;
+        y *= 0.12 * r;
+
+        const i3 = i * 3;
+        pos[i3] = x;
+        pos[i3 + 1] = y;
+        pos[i3 + 2] = (Math.random() - 0.5) * 0.6;
+      }
+
+      geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+
+      const mat = new THREE.PointsMaterial({
+        size: 0.08,
+        color: 0xff4d6d,
+        transparent: true,
+        opacity: 0.95
+      });
+
+      heart = new THREE.Points(geo, mat);
+      scene.add(heart);
+    }
+
+    function initSakura() {
+      if (sakuraRunning) return;
+      sakuraRunning = true;
+
+      const canvas = document.getElementById("sakuraCanvas");
+      const ctx = canvas.getContext("2d");
+
+      function resizeCanvas() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+
+      class Petal {
+        constructor(resetTop = true) {
+          this.reset(resetTop);
+        }
+
+        reset(resetTop = true) {
+          this.x = Math.random() * canvas.width;
+          this.y = resetTop ? -Math.random() * canvas.height : Math.random() * canvas.height;
+          this.size = 7 + Math.random() * 11;
+          this.speedY = 0.7 + Math.random() * 1.5;
+          this.speedX = -0.7 + Math.random() * 1.4;
+          this.swing = Math.random() * Math.PI * 2;
+          this.swingSpeed = 0.01 + Math.random() * 0.025;
+          this.rotation = Math.random() * Math.PI * 2;
+          this.rotationSpeed = -0.035 + Math.random() * 0.07;
+          this.opacity = 0.42 + Math.random() * 0.22;
+        }
+
+        update() {
+          this.y += this.speedY;
+          this.x += this.speedX + Math.sin(this.swing) * 0.55;
+          this.swing += this.swingSpeed;
+          this.rotation += this.rotationSpeed;
+
+          if (this.y > canvas.height + 40 || this.x < -60 || this.x > canvas.width + 60) {
+            this.reset(true);
+            this.y = -20 - Math.random() * 140;
+          }
+        }
+
+        draw() {
+          ctx.save();
+          ctx.translate(this.x, this.y);
+          ctx.rotate(this.rotation);
+          ctx.scale(1, 0.72);
+
+          const g = ctx.createLinearGradient(-this.size/2, -this.size/2, this.size/2, this.size/2);
+          g.addColorStop(0, `rgba(255,246,250,${this.opacity})`);
+          g.addColorStop(0.48, `rgba(255,205,225,${this.opacity})`);
+          g.addColorStop(1, `rgba(255,166,203,${this.opacity * 0.88})`);
+
+          ctx.fillStyle = g;
+          ctx.beginPath();
+          ctx.moveTo(0, -this.size * 0.9);
+          ctx.bezierCurveTo(this.size * 0.95, -this.size * 0.55, this.size * 0.9, this.size * 0.45, 0, this.size);
+          ctx.bezierCurveTo(-this.size * 0.9, this.size * 0.45, -this.size * 0.95, -this.size * 0.55, 0, -this.size * 0.9);
+          ctx.fill();
+
+          ctx.restore();
+        }
+      }
+
+      const petals = [];
+      const petalCount = Math.min(78, Math.max(40, Math.floor(window.innerWidth / 18)));
+
+      for (let i = 0; i < petalCount; i++) {
+        petals.push(new Petal(false));
+      }
+
+      function animateSakura() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        petals.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        requestAnimationFrame(animateSakura);
+      }
+
+      animateSakura();
+    }
+
+    function initFXCanvas() {
+      const canvas = document.getElementById("fxCanvas");
+      const ctx = canvas.getContext("2d");
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      window.addEventListener("resize", () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      });
+
+      const particles = [];
+
+      function drawHeart(ctx, x, y, size, color, alpha, rotation = 0) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(rotation);
+        ctx.scale(size / 20, size / 20);
+        ctx.globalAlpha = alpha;
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(0, -6);
+        ctx.bezierCurveTo(10, -18, 24, -2, 0, 18);
+        ctx.bezierCurveTo(-24, -2, -10, -18, 0, -6);
+        ctx.fill();
+        ctx.restore();
+      }
+
+      function animateFX() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+          const p = particles[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.01;
+          p.life -= 1;
+          p.rotation += p.rotationSpeed;
+
+          drawHeart(ctx, p.x, p.y, p.size, p.color, Math.max(p.life / p.maxLife, 0), p.rotation);
+
+          if (p.life <= 0) {
+            particles.splice(i, 1);
+          }
+        }
+
+        requestAnimationFrame(animateFX);
+      }
+
+      animateFX();
+
+      window.explodeHearts = function(x, y) {
+        for (let i = 0; i < 28; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = 1 + Math.random() * 3.4;
+
+          particles.push({
+            x,
+            y,
+            vx: Math.cos(angle) * speed,
+            vy: Math.sin(angle) * speed - 1.2,
+            size: 10 + Math.random() * 12,
+            color: Math.random() > 0.35 ? "#ff4d88" : "#ffd6e8",
+            life: 55 + Math.random() * 25,
+            maxLife: 80,
+            rotation: Math.random() * Math.PI * 2,
+            rotationSpeed: -0.08 + Math.random() * 0.16
+          });
+        }
+      };
+    }
+
+    return {
+      started,
+      startLove,
+      textVisible,
+      showButton,
+      confirmLove,
+      confirmed,
+      floating
+    };
+  }
+}).mount("#app");
 </script>
 
 </body>
